@@ -3,6 +3,7 @@ from parsel import Selector
 from urllib.parse import urljoin
 import time
 import random
+import pandas as pd
 
 # notes
 # if doesn't have BENQ title, not from BenQ
@@ -11,13 +12,43 @@ import random
 # https://scrapeops.io/web-scraping-playbook/how-to-scrape-amazon/
 # https://oxylabs.io/blog/how-to-scrape-amazon-product-data
 
+class AmazonProduct:
+    # private class variables
+    asin: int
+    name: str
+    productUrl: str
+    relativeUrl: str
+    sale_price: float
+    real_price: float
+    logo: str
+
+    def __init__(self, asin=0, name="", productUrl="", relativeUrl="", sale_price=0, real_price=0, logo="None"):
+        self.asin = asin
+        self.name = name
+        self.productUrl = productUrl
+        self.relativeUrl = relativeUrl
+        self.sale_price = sale_price
+        self.real_price = real_price
+        self.logo = logo
+
+    def to_dict(self):
+        return {
+            'Asin': self.asin,
+            'Product Name': self.name,
+            'Product Url': self.productUrl,
+            'Relative Url': self.relativeUrl,
+            'Sales Price': self.sale_price,
+            'Real Price': self.real_price,
+            'Company': self.logo
+        }
+
 # custom header
 custom_header = {
     'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36',
     'accept-language': 'en-GB,en;q=0.9'
 }
 
-# Array to hold product data
+# Array to hold AmazonProduct
 product_overview = []
 
 # keyword for amazon search
@@ -28,7 +59,7 @@ pages_scanned = 0
 
 for url in url_list:
     # wait before accessing page
-    time.sleep(random.randint(2, 5)) 
+    time.sleep(random.randint(2, 4)) 
     try:
         response = requests.get(url, headers=custom_header)
         if response.status_code == 200:
@@ -51,37 +82,23 @@ for url in url_list:
                 if real_price == None:
                     real_price = sale_price
 
+                productObject = AmazonProduct(asin, name, product_url, relative_url, sale_price, real_price, logo)
+
                 # appends product data for each product into object
-                product_overview.append(
-                    {
-                        "asin": asin,
-                        "name": name,
-                        "url": product_url,
-                        "sale_price": sale_price,
-                        "real_price": real_price,
-                        "logo": logo
-                    }
-                )
+                product_overview.append(productObject)
             
             # Gets all pages from page 1 to pages
             if "&page=1" in url:
-                pages = 5
+                pages = 3
                 for i in range(2, pages + 1):
                     new_page_url = f'https://www.amazon.com/s?k={keyword}&page={i}'
                     url_list.append(new_page_url)
 
-            # if want available pages from page 1
-            # if "&page=1" in url:
-            #     available_pages = sel.xpath(
-            #             '//a[has-class("s-pagination-item")][not(has-class("s-pagination-separator"))]/text()'
-            #         ).getall()
-            #     for page in available_pages:
-            #             search_url_paginated = f'https://www.amazon.com/s?k={keyword}&page={page}'
-            #             url_list.append(search_url_paginated)
     except Exception as e:
         print("Error", e)
 
-print(pages_scanned)
-for product in product_overview:
-    print(product)
-            
+# create dataframe from list of objects
+df = pd.DataFrame([product.to_dict() for product in product_overview])
+
+# export to excel
+print(df)
