@@ -1,9 +1,15 @@
+# Scraping dependencies
 import requests
 from parsel import Selector
 from urllib.parse import urljoin
+
+# Backend dependencies
 import time
 import random
 import pandas as pd
+
+# UI
+import tkinter as tk
 
 # notes
 # if doesn't have BENQ title, not from BenQ
@@ -101,4 +107,5 @@ for url in url_list:
 df = pd.DataFrame([product.to_dict() for product in product_overview])
 
 # export to excel
-print(df)
+excel_file_path = 'output.xlsx'
+df.to_excel(excel_file_path, index=False)
