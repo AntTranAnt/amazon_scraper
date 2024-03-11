@@ -24,14 +24,14 @@ def browse_folder():
 
 # TextBox Creation 
 inputtxt = tk.Entry(window, width = 60) 
-inputtxt.grid(row=0, column=0)
+inputtxt.grid(row=0, column=0, pady=5)
 
 # Create a button to browse for a folder
 browse_button = tk.Button(window, text="Browse Folder", command=browse_folder)
-browse_button.grid(row=0, column=1)
+browse_button.grid(row=0, column=1, pady=5)
 
 pathLabel = tk.Label(window, text = "")
-pathLabel.grid(row=1, column=0)
+pathLabel.grid(row=1, column=0, columnspan=2)
 
 # Button Creation 
 printButton = tk.Button(window, text = "Print",  command = getInput) 
@@ -40,8 +40,5 @@ printButton.grid(row=2, column=0, columnspan=2)
 # Label Creation 
 lbl = tk.Label(window, text = "") 
 lbl.grid(row=3, column=0)
-
-boollbl = tk.Label(window, text = str(browse_state)) 
-boollbl.grid(row=4, column=0)
 
 window.mainloop()
