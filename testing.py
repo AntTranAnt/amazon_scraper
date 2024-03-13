@@ -2,6 +2,9 @@ import tkinter as tk
 from tkinter import filedialog
 from AmazonScraper import AmazonScraper
 
+# To do
+# modify custom header to mimic user better
+
 # Create scraper object
 amazonScraper = AmazonScraper()
   
@@ -17,7 +20,7 @@ def getInput():
     if (browse_state.get()): 
         inp = inputtxt.get() 
         lbl.config(text = "Searching: " + inp, fg="black")
-        amazonScraper.search(input)
+        amazonScraper.search(input, 3)
         lbl.config(text = "File Exported", fg="green")
     else:
         pathLabel.config(text = "Pick Folder Path", fg = "red")

@@ -58,7 +58,7 @@ class AmazonScraper:
         self.product_overview.clear()
 
         url_list = [f'https://www.amazon.com/s?k={keyword}&page=1']
-        pages_scanned = pages
+        pages_scanned = 0
 
         for url in url_list:
             # wait before accessing page
@@ -92,7 +92,6 @@ class AmazonScraper:
                     
                     # Gets all pages from page 1 to pages
                     if "&page=1" in url:
-                        pages = 3
                         for i in range(2, pages + 1):
                             new_page_url = f'https://www.amazon.com/s?k={keyword}&page={i}'
                             url_list.append(new_page_url)
