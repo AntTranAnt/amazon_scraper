@@ -1,5 +1,9 @@
 import tkinter as tk
 from tkinter import filedialog
+from AmazonScraper import AmazonScraper
+
+# Create scraper object
+amazonScraper = AmazonScraper()
   
 # Top level window 
 window = tk.Tk() 
@@ -12,7 +16,9 @@ browse_state = tk.BooleanVar()
 def getInput(): 
     if (browse_state.get()): 
         inp = inputtxt.get() 
-        lbl.config(text = "Provided Input: "+ inp)
+        lbl.config(text = "Searching: " + inp, fg="black")
+        amazonScraper.search(input)
+        lbl.config(text = "File Exported", fg="green")
     else:
         pathLabel.config(text = "Pick Folder Path", fg = "red")
 
@@ -20,6 +26,7 @@ def getInput():
 def browse_folder():
     folder_path = filedialog.askdirectory()  # Open a folder selection dialog
     pathLabel.config(text = "Folder Path: " + folder_path, fg = "black")
+    amazonScraper.setFolderPath(folder_path)
     browse_state.set(True)
 
 # TextBox Creation 
@@ -27,18 +34,19 @@ inputtxt = tk.Entry(window, width = 60)
 inputtxt.grid(row=0, column=0, pady=5)
 
 # Create a button to browse for a folder
-browse_button = tk.Button(window, text="Browse Folder", command=browse_folder)
+browse_button = tk.Button(window, text="Browse Folder", command = browse_folder)
 browse_button.grid(row=0, column=1, pady=5)
 
 pathLabel = tk.Label(window, text = "")
 pathLabel.grid(row=1, column=0, columnspan=2)
 
 # Button Creation 
-printButton = tk.Button(window, text = "Print",  command = getInput) 
+printButton = tk.Button(window, text = "Search",  command = getInput) 
 printButton.grid(row=2, column=0, columnspan=2)
 
 # Label Creation 
 lbl = tk.Label(window, text = "") 
 lbl.grid(row=3, column=0)
+
 
 window.mainloop()
