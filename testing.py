@@ -2,6 +2,10 @@ import tkinter as tk
 from tkinter import filedialog
 from AmazonScraper import AmazonScraper
 
+# Program for BenQ Corp
+# Asks for Excel Input of ASIN values
+# Returns excel file with price and company name
+
 # To do
 # modify custom header to mimic user better
 
