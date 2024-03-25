@@ -18,6 +18,7 @@ window.title("TextBox Input")
 
 # Create a BooleanVar to track button state
 browse_state = tk.BooleanVar()
+file_state = tk.BooleanVar()
 
 # Function to get input
 def getInput(): 
@@ -35,6 +36,14 @@ def browse_folder():
     pathLabel.config(text = "Folder Path: " + folder_path, fg = "black")
     amazonScraper.setFolderPath(folder_path)
     browse_state.set(True)
+
+#Function to look for input file
+def browse_file():
+    file_path = filedialog.askopenfilename()
+    fileName.config(text = "File Name: " + file_path, fg = "black")
+    amazonScraper.setFileName(fileName)
+    file_state.set(True)
+
 
 # TextBox Creation 
 inputtxt = tk.Entry(window, width = 60) 
