@@ -23,7 +23,9 @@ class BenqAmazonScraper(AmazonScraper):
     # Adds to dataframe property
     def searchASIN(self):
         # https://www.amazon.com/dp/
-        baseLink = "https://www.amazon/dp/"
+        for index, row in self.dataframe.iterrows():
+            baseLink = "https://www.amazon/dp/" + str(self.dataframe.iat[index, 0])
+            
 
     # 4. Export database to excel file
     # def exportExcel(self):
