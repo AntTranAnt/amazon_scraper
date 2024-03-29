@@ -5,19 +5,19 @@ import pandas as pd
 from AmazonScraper import AmazonScraper
 
 class BenqAmazonScraper(AmazonScraper):
-    fileName: str
+    filePath: str
     dataframe: pd
 
     # Use the methods in linear order
 
     # 1. Method to set file name of import excel file to search
-    def setFileName(self, fileName):
-        self.fileName = fileName
+    def setFileName(self, filePath):
+        self.filePath = filePath
     
     # 2. Method to read excel file to data frame
-    # Make sure in external program to call setFileName first
+    # Make sure in external program to call setfilePath first
     def readFile(self):
-        self.dataframe = pd.read_excel(self.fileName)
+        self.dataframe = pd.read_excel(self.filePath)
     
     # 3. Method to search each ASIN for company name and price
     # Adds to dataframe property
@@ -26,5 +26,5 @@ class BenqAmazonScraper(AmazonScraper):
         baseLink = "https://www.amazon/dp/"
 
     # 4. Export database to excel file
-    def exportExcel(self):
+    # def exportExcel(self):
         # do i call exportExcel from superclass?

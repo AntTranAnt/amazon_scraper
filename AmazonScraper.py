@@ -1,3 +1,6 @@
+# Class that searches Amazon pages with inputed word
+# Export to Excel File
+
 # Scraping dependencies
 import requests
 from parsel import Selector
