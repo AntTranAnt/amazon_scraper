@@ -1,6 +1,8 @@
 #Extended class for BenQ scraping
 #Takes in excel file and scrapes each ASIN to find company name and price
 import pandas as pd
+import requests
+from parsel import Selector
 
 from AmazonScraper import AmazonScraper
 
@@ -24,8 +26,18 @@ class BenqAmazonScraper(AmazonScraper):
     def searchASIN(self):
         # https://www.amazon.com/dp/
         for index, row in self.dataframe.iterrows():
-            baseLink = "https://www.amazon/dp/" + str(self.dataframe.iat[index, 0])
-            
+            baseLink = "https://www.amazon.com/dp/" + str(self.dataframe.iat[index, 0])
+
+            try:
+                response = requests.get(baseLink, self.custom_header)
+                if response.status_code == 200:
+                    sel = Selector(text=response.text)
+                    price = sel.css('.a-price span[aria-hidden="true"] ::text').get("")
+                    if not price:
+                        price = sel.css('.a-price .a-offscreen ::text').get("")
+            except Exception as e:
+                print("Error")
+
 
     # 4. Export database to excel file
     # def exportExcel(self):
