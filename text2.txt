@@ -1,2 +1,1 @@
-<div class="celwidget" data-csa-c-asin="B0CNSB97QN" data-csa-c-content-id="shipFromSoldByAbbreviated" data-csa-c-is-in-initial-active-row="true" data-csa-c-slot-id="newAccordionRow_0" data-csa-c-type="widget" data-feature-name="shipFromSoldByAbbreviated" id="shipFromSoldByAbbreviated_feature_div">
-<div class="a-section show-on-unselected sfsb-header-text" id="sfsb_accordion_head"> <div class="a-row"> <div class="a-column a-span12 a-text-left truncate"> <span class="a-size-small"> Ships from: </span> <span class="a-size-small"> Amazon </span> </div> </div> <div class="a-row"> <div class="a-column a-span12 a-text-left truncate"> <span class="a-size-small"> Sold by: </span> <span class="a-size-small"> BenQ INFTY Lab </span> </div> </div> </div> </div>
+Adorama
