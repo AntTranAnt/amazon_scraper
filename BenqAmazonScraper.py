@@ -49,6 +49,10 @@ class BenqAmazonScraper(AmazonScraper):
                     # Scrape for Ships from and Sold by
                     shipsFromInfo = BeautifulSoup(str(shipsFrom), 'html.parser')
                     span_elements = shipsFromInfo.find_all('span')
+
+                    #Check if unavailable
+                    availability_indicator = soup.find('span', string='Currently unavailable.')
+
                     shipsFromOutput = "Currently Unavailable"
                     soldByOutput = "Currently Unavailable"
                     if (shipsFrom2):
@@ -76,5 +80,7 @@ class BenqAmazonScraper(AmazonScraper):
 
 
     # 4. Export database to excel file
-    # def exportExcel(self):
-        # do i call exportExcel from superclass?
+    def exportExcel(self):
+        # export to excel
+        excel_file_path = self.folderPath + '/output.xlsx'
+        self.dataframe.to_excel(excel_file_path, index=False)
