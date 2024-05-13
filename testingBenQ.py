@@ -28,7 +28,7 @@ def browse_file():
 
 #Function to scrape
 def scrape():
-    loadingMsg.config(text="Loading...", fg = "red")
+    loadingMsg.config(text="Loading...", fg="red")
     amazonScraper.searchASIN()
     loadingMsg.config(text="Finished", fg="green")
 
