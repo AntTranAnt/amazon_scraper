@@ -7,6 +7,9 @@ from parsel import Selector
 from AmazonScraper import AmazonScraper
 from bs4 import BeautifulSoup
 
+import time
+import random
+
 class BenqAmazonScraper(AmazonScraper):
     filePath: str
     dataframe: pd
@@ -16,6 +19,7 @@ class BenqAmazonScraper(AmazonScraper):
     # 1. Method to set file name of import excel file to search
     def setFileName(self, filePath):
         self.filePath = filePath
+        self.readFile()
     
     # 2. Method to read excel file to data frame
     # Make sure in external program to call setfilePath first
@@ -32,13 +36,14 @@ class BenqAmazonScraper(AmazonScraper):
         # https://www.amazon.com/dp/
         for index, row in self.dataframe.iterrows():
             baseLink = "https://www.amazon.com/dp/" + str(self.dataframe.iat[index, 0])
-
+            # wait before accessing page
+            self.wait()
             try:
                 response = requests.get(baseLink, headers=self.custom_header)
                 if response.status_code == 200:
                     sel = Selector(text=response.text)
                     price = "$" + sel.css('.a-price-whole ::text').get("") + "." + sel.css('.a-price-fraction ::text').get("")
-                    self.dataframe.iat[index, 1] = price
+                    self.dataframe.iat[index, 1] = str(price)
                     # Try using beautiful soup
                     soup = BeautifulSoup(response.text, 'html.parser')
                     buybox = soup.find(id='desktop_buybox')
@@ -58,25 +63,35 @@ class BenqAmazonScraper(AmazonScraper):
                     if (shipsFrom2):
                         soldByOutput = str(shipsFrom2.text) #Sold by
                     else:
-                        soldByOutput = "Sold by: Amazon"
+                        soldByOutput = "Amazon"
 
                     if len(span_elements) == 0:
-                        shipsFromOutput = "Shipped From: Amazon" #Ships from
+                        shipsFromOutput = "Amazon" #Ships from
                     else:
                         index = 0
                         while index < len(span_elements):
                             if span_elements[index].text.strip() == "Ships from:":
                                 # Return this
                                 shipsFrom = str(span_elements[index + 1].text)
-                                shipsFromOutput = shipsFrom #Ships from
+                                shipsFromOutput = str(shipsFrom) #Ships from
                                 index = len(span_elements)
                             else:
                                 index += 1
-                    self.dataframe.iat[index, 2] = soldByOutput
-                    self.dataframe.iat[index, 3] = shipsFromOutput
-                    
+                    self.dataframe.iat[index, 2] = str(soldByOutput)
+                    self.dataframe.iat[index, 3] = str(shipsFromOutput)
+        
             except Exception as e:
                 print("Error")
+        self.exportExcel()
+    
+    def wait():
+        wait_time = random.uniform(1.0, 1.5)  # Generate a random float between 1.0 and 1.5
+        interval = 0.1  # Interval of 0.1 seconds
+
+        while wait_time > 0:
+            # Sleep for the interval
+            time.sleep(interval)
+            wait_time -= interval
 
 
     # 4. Export database to excel file

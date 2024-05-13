@@ -65,5 +65,4 @@ printButton.grid(row=2, column=0, columnspan=2)
 lbl = tk.Label(window, text = "") 
 lbl.grid(row=3, column=0)
 
-
 window.mainloop()

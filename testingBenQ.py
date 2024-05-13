@@ -26,6 +26,12 @@ def browse_file():
     amazonScraper.setFileName(file_path)
     file_state.set(True)
 
+#Function to scrape
+def scrape():
+    loadingMsg.config(text="Loading...", fg = "red")
+    amazonScraper.searchASIN()
+    loadingMsg.config(text="Finished", fg="green")
+
 #Create Label Discription for application
 appLabel = tk.Label(window, text="Application to scrape Amazon for Price, Seller Data, and Shipping Data from ASIN")
 appLabel.grid(row=0, column=0, columnspan=2, padx=10)
@@ -59,7 +65,10 @@ pathFolderLabel = tk.Label(window, text = "", bg="gray")
 pathFolderLabel.grid(row=9, column=1)
 
 #Create a button to start scrape
-scrape_button = tk.Button(window, text = "Start")
+scrape_button = tk.Button(window, text = "Start", command=scrape)
 scrape_button.grid(row=10, column=0, columnspan=2, pady=(1, 5))
+
+loadingMsg = tk.Label(window, text="")
+loadingMsg.grid(row=11, column=0, columnspan=2)
 
 window.mainloop()
