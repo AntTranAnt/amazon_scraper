@@ -1,6 +1,7 @@
 import tkinter as tk
 from tkinter import filedialog
 from BenqAmazonScraper import BenqAmazonScraper
+import time
 
 amazonScraper = BenqAmazonScraper()
 
@@ -28,12 +29,17 @@ def browse_file():
 
 #Function to scrape
 def scrape():
-    loadingMsg.config(text="Loading...", fg="red")
-    #scrape2()
+    if browse_state.get() and file_state.get():
+        window.after(0, lambda: scrape_button.config(text="Loading", state="disabled"))
+        scrape2()
+    else:
+        loadingMsg.config(text="Pick a File and Folder before Scraping", fg="red")
+
 
 def scrape2():
     amazonScraper.searchASIN()
-    loadingMsg.config(text="Finished", fg="green")
+    window.after(0, lambda: scrape_button.config(text="Finished", state="normal"))
+    loadingMsg.config(text="", fg="green")
 
 #Create Label Discription for application
 appLabel = tk.Label(window, text="Application to scrape Amazon for Price, Seller Data, and Shipping Data from ASIN")
