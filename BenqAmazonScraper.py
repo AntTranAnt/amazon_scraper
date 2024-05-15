@@ -24,7 +24,10 @@ class BenqAmazonScraper(AmazonScraper):
     # 2. Method to read excel file to data frame
     # Make sure in external program to call setfilePath first
     def readFile(self):
-        self.dataframe = pd.read_excel(self.filePath)
+        self.dataframe = pd.read_excel(self.filePath, usecols=[0])
+        self.dataframe['Price'] = ''
+        self.dataframe['Sold By'] = ''
+        self.dataframe['Ships From'] = ''
     
     # 3. Method to search each ASIN for company name and price
     # Adds to dataframe property
@@ -68,20 +71,20 @@ class BenqAmazonScraper(AmazonScraper):
                     if len(span_elements) == 0:
                         shipsFromOutput = "Amazon" #Ships from
                     else:
-                        index = 0
-                        while index < len(span_elements):
-                            if span_elements[index].text.strip() == "Ships from:":
+                        indexy = 0
+                        while indexy < len(span_elements) - 1:
+                            if span_elements[indexy].text.strip() == "Ships from:":
                                 # Return this
-                                shipsFrom = str(span_elements[index + 1].text)
+                                shipsFrom = str(span_elements[indexy + 1].text)
                                 shipsFromOutput = str(shipsFrom) #Ships from
-                                index = len(span_elements)
+                                indexy = len(span_elements)
                             else:
-                                index += 1
+                                indexy += 1
                     self.dataframe.iat[index, 2] = str(soldByOutput)
                     self.dataframe.iat[index, 3] = str(shipsFromOutput)
         
             except Exception as e:
-                print("Error")
+                print(e)
         self.exportExcel()
     
     def wait(self):
