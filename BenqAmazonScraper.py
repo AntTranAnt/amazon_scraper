@@ -106,7 +106,6 @@ class BenqAmazonScraper(AmazonScraper):
     
     # Regex expression to search for SKU in title
     def SKUSearch(self, text):
-        print(text)
         pattern = r'[A-Z]+[0-9]+[A-Z0-9]*\b'
         SKUString = re.search(pattern, text)
         if SKUString:
