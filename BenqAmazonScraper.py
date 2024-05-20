@@ -66,10 +66,10 @@ class BenqAmazonScraper(AmazonScraper):
                     if (shipsFrom2):
                         soldByOutput = str(shipsFrom2.text) #Sold by
                     else:
-                        soldByOutput = "Amazon"
+                        soldByOutput = "Unavailable"
 
                     if len(span_elements) == 0:
-                        shipsFromOutput = "Amazon" #Ships from
+                        shipsFromOutput = soldByOutput #Ships from
                     else:
                         indexy = 0
                         while indexy < len(span_elements) - 1:
@@ -80,6 +80,7 @@ class BenqAmazonScraper(AmazonScraper):
                                 indexy = len(span_elements)
                             else:
                                 indexy += 1
+                    
                     self.dataframe.iat[index, 2] = str(soldByOutput)
                     self.dataframe.iat[index, 3] = str(shipsFromOutput)
         
