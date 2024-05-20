@@ -96,7 +96,7 @@ class BenqAmazonScraper(AmazonScraper):
         self.exportExcel()
     
     def wait(self):
-        wait_time = random.uniform(0.5, 1.0)  # Generate a random float between 1.0 and 1.5
+        wait_time = random.uniform(0.5, 1.0)  # Generate a random float between 0.5 and 1
         interval = 0.1  # Interval of 0.1 seconds
 
         while wait_time > 0:
