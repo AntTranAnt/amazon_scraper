@@ -6,6 +6,7 @@ from parsel import Selector
 
 from AmazonScraper import AmazonScraper
 from bs4 import BeautifulSoup
+import re
 
 import time
 import random
@@ -25,6 +26,7 @@ class BenqAmazonScraper(AmazonScraper):
     # Make sure in external program to call setfilePath first
     def readFile(self):
         self.dataframe = pd.read_excel(self.filePath, usecols=[0])
+        self.dataframe['SKU'] = ''
         self.dataframe['Price'] = ''
         self.dataframe['Sold By'] = ''
         self.dataframe['Ships From'] = ''
@@ -54,6 +56,10 @@ class BenqAmazonScraper(AmazonScraper):
                     shipsFrom = buyboxSoup.find(id='shipFromSoldByAbbreviated_feature_div')
                     shipsFrom2 = buyboxSoup.find(id="sellerProfileTriggerId")
 
+                    # Scrape SKU
+                    name = sel.css("#productTitle::text").get("").strip()
+                    SKU = self.SKUSearch(name)
+
                     # Scrape for Ships from and Sold by
                     shipsFromInfo = BeautifulSoup(str(shipsFrom), 'html.parser')
                     span_elements = shipsFromInfo.find_all('span')
@@ -81,21 +87,32 @@ class BenqAmazonScraper(AmazonScraper):
                             else:
                                 indexy += 1
                     
-                    self.dataframe.iat[index, 2] = str(soldByOutput)
-                    self.dataframe.iat[index, 3] = str(shipsFromOutput)
+                    self.dataframe.iat[index, 2] = str(SKU)
+                    self.dataframe.iat[index, 3] = str(soldByOutput)
+                    self.dataframe.iat[index, 4] = str(shipsFromOutput)
         
             except Exception as e:
                 print(e)
         self.exportExcel()
     
     def wait(self):
-        wait_time = random.uniform(1.0, 1.5)  # Generate a random float between 1.0 and 1.5
+        wait_time = random.uniform(0.5, 1.0)  # Generate a random float between 1.0 and 1.5
         interval = 0.1  # Interval of 0.1 seconds
 
         while wait_time > 0:
             # Sleep for the interval
             time.sleep(interval)
             wait_time -= interval
+    
+    # Regex expression to search for SKU in title
+    def SKUSearch(self, text):
+        print(text)
+        pattern = r'[A-Z]+[0-9]+[A-Z0-9]*\b'
+        SKUString = re.search(pattern, text)
+        if SKUString:
+            return SKUString.group()
+        else:
+            return None
 
 
     # 4. Export database to excel file
