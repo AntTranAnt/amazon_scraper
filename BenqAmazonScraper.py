@@ -10,6 +10,7 @@ import re
 
 import time
 import random
+from datetime import datetime
 
 class BenqAmazonScraper(AmazonScraper):
     filePath: str
@@ -115,7 +116,9 @@ class BenqAmazonScraper(AmazonScraper):
 
 
     # 4. Export database to excel file
+    # change name of output to date
     def exportExcel(self):
         # export to excel
-        excel_file_path = self.folderPath + '/output.xlsx'
+        current_time = datetime.now().time()
+        excel_file_path = self.folderPath + '/output_' + current_time.strftime("%H_%M_%S") + '.xlsx'
         self.dataframe.to_excel(excel_file_path, index=False)
