@@ -27,8 +27,8 @@ class BenqAmazonScraper(AmazonScraper):
     # Make sure in external program to call setfilePath first
     def readFile(self):
         self.dataframe = pd.read_excel(self.filePath, usecols=[0])
-        self.dataframe['SKU'] = ''
         self.dataframe['Price'] = ''
+        self.dataframe['SKU'] = ''
         self.dataframe['Sold By'] = ''
         self.dataframe['Ships From'] = ''
     
@@ -49,7 +49,7 @@ class BenqAmazonScraper(AmazonScraper):
                 if response.status_code == 200:
                     sel = Selector(text=response.text)
                     price = "$" + sel.css('.a-price-whole ::text').get("") + "." + sel.css('.a-price-fraction ::text').get("")
-                    self.dataframe.iat[index, 1] = str(price)
+                    self.dataframe.iat[index, 2] = str(price)
                     # Try using beautiful soup
                     soup = BeautifulSoup(response.text, 'html.parser')
                     buybox = soup.find(id='desktop_buybox')
@@ -88,7 +88,10 @@ class BenqAmazonScraper(AmazonScraper):
                             else:
                                 indexy += 1
                     
-                    self.dataframe.iat[index, 2] = str(SKU)
+                    # Case for when Sold By is Unavailable and Ships From is not
+                    if shipsFromOutput != "Unavailable" and soldByOutput == "Unavailable":
+                        soldByOutput = shipsFromOutput
+                    self.dataframe.iat[index, 1] = str(SKU)
                     self.dataframe.iat[index, 3] = str(soldByOutput)
                     self.dataframe.iat[index, 4] = str(shipsFromOutput)
         
