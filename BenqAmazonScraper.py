@@ -122,6 +122,6 @@ class BenqAmazonScraper(AmazonScraper):
     # change name of output to date
     def exportExcel(self):
         # export to excel
-        current_time = datetime.now().time()
-        excel_file_path = self.folderPath + '/output_' + current_time.strftime("%H_%M_%S") + '.xlsx'
+        current_time = datetime.now()
+        excel_file_path = self.folderPath + '/output_' + current_time.strftime("%Y_%j_%H_%M") + '.xlsx'
         self.dataframe.to_excel(excel_file_path, index=False)
